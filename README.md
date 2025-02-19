@@ -1,3 +1,4 @@
+# Music to figurative art
 This repository provides the codes for generating artistic images from music inputs.
 It was adopted to produce the paper "A Multimodal Visual Language Model for Musical Encoding", whose abstract is the following:
 
