@@ -11,8 +11,6 @@ import torch
 import pandas as pd
 from pathlib import Path
 
-
-
 if version.parse(version.parse(PIL.__version__).base_version) >= version.parse("9.1.0"):
     PIL_INTERPOLATION = {
         "linear": PIL.Image.Resampling.BILINEAR,
@@ -29,12 +27,13 @@ else:
         "lanczos": PIL.Image.LANCZOS,
         "nearest": PIL.Image.NEAREST,
     }
+
 # ------------------------------------------------------------------------------
 imagenet_templates_small = [
     "an art image of {}"
 ]
 
-class VGGMus(Dataset):
+class Museart(Dataset):  # Cambiato il nome della classe da VGGMus a Museart
 
     def __init__(self, args, tokenizer, logger, size=512, interpolation='bicubic'):
        """
@@ -50,8 +49,8 @@ class VGGMus(Dataset):
        self.image_root_dir = args.data_dir + image_lst
        self.audio_root_dir = args.data_dir + audio_lst
 
-       self.df_image = pd.read_csv('/content/drive/MyDrive/Tirocinio_Tesi_Baione/Music_to_figurative_art/VGGMus/images.csv')
-       self.df_audio = pd.read_csv('/content/drive/MyDrive/Tirocinio_Tesi_Baione/Music_to_figurative_art/VGGMus/audio.csv')
+       self.df_image = pd.read_csv('/content/drive/MyDrive/Tirocinio_Tesi_Baione/Music_to_figurative_art/Museart/images.csv')
+       self.df_audio = pd.read_csv('/content/drive/MyDrive/Tirocinio_Tesi_Baione/Music_to_figurative_art/Museart/audio.csv')
 
        self.image_path = list()
        self.audio_path = list()
@@ -96,19 +95,20 @@ class VGGMus(Dataset):
     
     
     def sample_image(self, aud, df_music):   
-        # Estrai il nome del file audio senza estensione
+        # Extract the file audio name without extension
            audio_filename = os.path.splitext(os.path.basename(aud))[0]
 
-        # Trova l'insieme e la classe associati al file audio
+        # Find the set and the class of the file audio
            audio_info = df_music.loc[df_music['id'] == audio_filename]
            audio_info_df = pd.DataFrame(audio_info)
            audio_class = audio_info_df.iat[0, 1]
-        # Trova le immagini corrispondenti nello stesso insieme e classe
+        
+        # Find the corresponding images belonging to the same set and class
            corresponding_images = self.df_images.loc[self.df_images['classe'] == audio_class]
            if corresponding_images.empty:
                 self.audio_path.remove(aud)
 
-        # Scegli casualmente un'immagine dalla lista
+        # Chose randomly an image from the list
            corr_images_list = corresponding_images.values.tolist()
            random.shuffle(corr_images_list)
            random_corresponding_image = random.choice(corr_images_list)
