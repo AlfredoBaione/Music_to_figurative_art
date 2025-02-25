@@ -18,7 +18,7 @@ from diffusers.utils import check_min_version
 # TODO: remove and import from diffusers.utils when the new version of diffusers is released
 from transformers import CLIPTokenizer
 
-from dataloader_colab import VGGMus
+from dataloader_colab import Museart
 from modules.MusicToken.MusicToken_no_accel import MusicTokenWrapper
 
 # Will error if the minimal version of diffusers is not installed. Remove at your own risks.
@@ -154,7 +154,7 @@ def inference(args):
     if args.allow_tf32:
         torch.backends.cuda.matmul.allow_tf32 = True
 
-    test_dataset = VGGMus(
+    test_dataset = Museart(
         args=args,
         tokenizer=tokenizer,
         logger=logger,
