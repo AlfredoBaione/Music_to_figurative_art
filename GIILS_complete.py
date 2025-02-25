@@ -8,7 +8,7 @@ import pandas as pd
 import math
 
 
-# Funzione per caricare e processare i file immagine
+# Function to load and process images
 def get_image_embedding(image_path, model_clip, processor):
     image = Image.open(image_path)
     inputs = processor(images=image, return_tensors="pt")
@@ -36,11 +36,11 @@ def get_sorted_file_paths(directory):
     file_paths.sort()  # Ordina i file in base ai loro nomi
     return file_paths
 
-# Carica il modello CLIP per le immagini
+# Load the CLIP model for the images 
 clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
 clip_processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
-#cosine similarities for same label generated images
+#paths to images and directories containig inputs having the same label 
 main_folder = 'F:/Music_to_figurative_art/output/performance_measures_test/07/GIILS/test'
 image_directory = 'F:/Music_to_figurative_art/output/performance_measures_test/07/AIS/image'
 
@@ -49,15 +49,16 @@ image_embeddings = get_image_embeddings(image_path, clip_model, clip_processor)
 
 results = []
 directory_summaries = []
-# Scorri ogni sotto-directory nella directory principale
+
+# Traverse each sub-directory in the main directory
 for subdir, _, files in os.walk(main_folder):
     if not files:
         continue
     
-    # Estrai il nome della sotto-directory
+    # Estract the sub-directory name
     dir_name = os.path.basename(subdir)
 
-    # Carica e processa tutte le immagini nella directory corrente
+    # Load and process all the immages in the current directory
     image_features = []
     image_files = []
 
@@ -71,7 +72,7 @@ for subdir, _, files in os.walk(main_folder):
         image_files.append(file)
          
         
-    # Calcola la similarità cosinica tra immagini generate
+    # Compute the cosine similarity between two images generated with inputs having the same label
     num_images = len(image_features)
     total_similarity = 0
     num_pairs = 0
@@ -89,7 +90,7 @@ for subdir, _, files in os.walk(main_folder):
             })
             
     
-    #Calcola la media normalizzata come percentuale
+    #Compute the mean of the similarities obtained from images generated with inputs having the same label 
     if num_pairs > 0:
         sim = 0
         for i in range(num_images):
@@ -106,7 +107,7 @@ for subdir, _, files in os.walk(main_folder):
         sim = sim / (k - 1)                          
         mean_similarity = (total_similarity - sim) / num_pairs
 
-        # Normalizzazione da -1 a 1 a 0-100%
+        # Normalization of the interval [-1,1] into [0,100]%
         x = math.acos(mean_similarity)
         y = 1 - x * (2 / math.pi)
         giils = ((y + 1) / 2) * 100  
@@ -118,16 +119,16 @@ for subdir, _, files in os.walk(main_folder):
 
 
 
-# Crea un DataFrame Pandas e salva i risultati in un file CSV
+# Create a DataFrame Pandas and save the results in a CSV file
 df = pd.DataFrame(results)
 df.to_csv('images_similarity.csv', index=False)
 
-# Crea un DataFrame Pandas per le similarità tra immagini della stessa categoria e salva i risultati in un file CSV
+# Create a Pandas DataFrame for the similarities obtained and save the results in a CSV file
 df_summary = pd.DataFrame(directory_summaries)
 df_summary.to_csv('label_images_similarity.csv', index=False)
 
-print("Calcolo delle similarità tra immagini generate con la stessa etichetta completato e salvato in 'images_cosine_similarity.csv'")
-print("Somma delle similarità per etichette salvata in 'label_images_similarity.csv'")
+print("Calculation of similarities between images generated with the same label completed and saved in 'images_cosine_similarity.csv'")
+print("Images similarities saved in 'label_images_similarity.csv'")
 
-# stampa i valori di giils per le varie etichette, ordinati
+# Print the GIILS values for the different labels, sorted
 print(df_summary.sort_values(by='GIILS', ascending=False))
