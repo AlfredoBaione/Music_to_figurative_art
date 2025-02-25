@@ -52,7 +52,7 @@ def parse_args():
                         help="Path to pretrained model or model identifier from huggingface.co/models.")
     parser.add_argument("--tokenizer_name", type=str, default=None,
                         help="Pretrained tokenizer name or path if not the same as model_name")
-    parser.add_argument("--data_dir", type=str, default ="/content/drive/MyDrive/Tirocinio_Tesi_Baione/Music_to_figurative_art/VGGMus/",
+    parser.add_argument("--data_dir", type=str, default ="/content/drive/MyDrive/Tirocinio_Tesi_Baione/Music_to_figurative_art/Museart/",
                         help="A folder containing the data.")
     parser.add_argument("--placeholder_token", type=str, default="<*>",
                         help="A token to use as a placeholder for the concept.")
@@ -214,7 +214,7 @@ def train_validation():
 
     
 
-    train_dataset = VGGMus(
+    train_dataset = Museart(
         args=args,
         tokenizer=tokenizer,
         logger=logger
@@ -264,7 +264,7 @@ def train_validation():
 
     # validation data
     args.data_set = 'validation'
-    validation_dataset = VGGMus(
+    validation_dataset = Museart(
         args=args,
         tokenizer=tokenizer,
         logger=logger
