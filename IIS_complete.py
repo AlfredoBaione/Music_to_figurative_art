@@ -10,7 +10,7 @@ import math
 
 # ------------------------------------------------------------------------------
 
-# Funzione per caricare e processare i file immagine
+# Function to load and process images
 def get_image_embeddings(image_paths, model_clip, processor):
     embeddings_list = []
     for image_path in image_paths:
@@ -21,7 +21,7 @@ def get_image_embeddings(image_paths, model_clip, processor):
         embeddings_list.append(embeddings.squeeze().numpy())
     return np.array(embeddings_list)
 
-# Ottieni i percorsi dei file nelle directory e ordinali
+# Get the file paths in the directories and sort them
 def get_sorted_file_paths(directory):
     image_extensions = [".jpg", ".JPG", ".Jpg",".jpeg", ".JPEG", ".Jpeg", ".png", ".PNG", ".Png"]
     file_paths=[]
@@ -31,31 +31,31 @@ def get_sorted_file_paths(directory):
     return file_paths
 
 
-# Percorsi alle directory di audio e immagini
+# Paths to the audio and image directories
 ground_truth_directory = 'F:/Music_to_figurative_art/output/performance_measures_test/07/IIS/ground_truth'
 image_directory = 'F:/Music_to_figurative_art/output/performance_measures_test/07/IIS/image'
 image_directory_2 = 'F:/image_test'
 
 
-# Ottieni i percorsi ordinati dei file audio e immagine
+# Get the sorted paths of the audio and images
 ground_truth_paths = get_sorted_file_paths(ground_truth_directory)
 image_paths = get_sorted_file_paths(image_directory)
 #ottieni i percorsi dei file immagine di test
 image_paths_2 = get_sorted_file_paths(image_directory_2) 
 
 
-# Carica il modello CLIP per le immagini
+# Load the CLIP model for images
 clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
 clip_processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
-# Ottieni gli embeddings per tutte le immagini
+# Get the embeddings for all images
 ground_truth_embeddings = get_image_embeddings(ground_truth_paths, clip_model, clip_processor)
 image_embeddings = get_image_embeddings(image_paths, clip_model, clip_processor)
 image_embeddings_2 = get_image_embeddings(image_paths_2, clip_model, clip_processor)
 
 
 
-# Confronto degli embeddings (ad esempio, il prodotto scalare)
+# Comparison of embeddings (for example, the dot product)
 def compute_similarity(ground_embeddings, image_embeddings):
     similarities = []
     for ground_emb, image_emb in zip(ground_embeddings, image_embeddings):
@@ -84,10 +84,10 @@ for j in range(len(image_embeddings)):
 
 similarities = (similarities_1 - similarities_2)
 
-# Calcola la media delle similarità
+# Compute the mean of similarities
 mean_similarity = np.mean(similarities)
 
-# Mappa la media delle similarità da [-1, 1] a [0, 100] percentuale
+# Mapping the similarity mean from [-1, 1] to [0, 100] (percentage)
 x = math.acos(mean_similarity)
 y = 1 - x * (2 / math.pi)
 mean_similarity_percentage = ((y + 1) / 2) * 100
@@ -101,6 +101,6 @@ for i, similarity in enumerate(similarities):
     
 print(f"IIS: {mean_similarity_percentage}%")
 
-# Salva gli embeddings per un uso successivo (opzionale)
+# Save the embeddings for later use (optional)
 np.save("ground_truth_image_embeddings.npy", ground_truth_embeddings)
 np.save("image_embeddings.npy", image_embeddings)
