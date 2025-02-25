@@ -31,7 +31,7 @@ from tqdm.auto import tqdm
 from transformers import CLIPTokenizer
 
 from modules.MusicToken.MusicToken_no_accel import MusicTokenWrapper
-from dataloader_colab import VGGMus
+from dataloader_colab import Museart
 
 # Will error if the minimal version of diffusers is not installed. Remove at your own risks.
 check_min_version("0.12.0")
