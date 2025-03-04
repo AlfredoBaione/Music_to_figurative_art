@@ -4,7 +4,7 @@ It was adopted to produce the paper "A Multimodal Visual Language Model for Musi
 
 "In the era of deep generative modeling, generative art has become one of the most challenging research fields. Understanding the potential of machine learning within the artistic domain is key to exploring AI’s role in human-machine co-creative processes. In this context, the paper focuses on developing a multimodal deep generative model capable of creating artistic images from 30-second musical inputs. This contribution provides a detailed description of the generative pipeline and the dataset created for the experiment. The results obtained from this highly experimental contribution, including qualitative and quantitative outcomes, are promising and provide a solid foundation for further exploration of multimodal AI's creative potential, particularly from an emotional semantic perspective."
 
-The dataset adopted is Museart.
+The dataset adopted is Museart (https://kaggle.com/datasets/64bae3c3c75ff45297b6326a1fa94114b7a1a98858cc61c09f3a36e4a8485d6b).
 
 
 
