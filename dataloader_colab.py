@@ -70,8 +70,8 @@ class Museart(Dataset):  # Cambiato il nome della classe da VGGMus a Museart
        audios = set([file_path[:-4] for file_path in os.listdir(self.audio_root_dir)])
        samples_audio = audios 
        
-       self.df_music =  self.df_audio[self.df_audio["tipo"] == self.data_set]
-       self.df_images = self.df_image[self.df_image["tipo"] == self.data_set]
+       self.df_music =  self.df_audio[self.df_audio["set"] == self.data_set]
+       self.df_images = self.df_image[self.df_image["set"] == self.data_set]
        self.prepare_dataset(samples_audio)
        
        self.num_samples = len(self.audio_path)
@@ -104,7 +104,7 @@ class Museart(Dataset):  # Cambiato il nome della classe da VGGMus a Museart
            audio_class = audio_info_df.iat[0, 1]
         
         # Find the corresponding images belonging to the same set and class
-           corresponding_images = self.df_images.loc[self.df_images['classe'] == audio_class]
+           corresponding_images = self.df_images.loc[self.df_images['class'] == audio_class]
            if corresponding_images.empty:
                 self.audio_path.remove(aud)
 
@@ -123,7 +123,7 @@ class Museart(Dataset):  # Cambiato il nome della classe da VGGMus a Museart
              df_aud = self.df_music[self.df_music.id == aud]
              if df_aud.empty:
                 continue
-             label = df_aud["classe"].unique()[0]
+             label = df_aud["class"].unique()[0]
              self.audio_path.append(os.path.join(self.audio_root_dir, aud + ".wav"))
              self.label.append(label) 
 
